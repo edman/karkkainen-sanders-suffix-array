@@ -83,20 +83,21 @@ void karkkainen_sanders_sa(int *s, int *sa, int n, int sigma) {
 
     // If names are not all distinct, find sa12 recursively
     if (name_count < n12) {
-        // Initialize string of size 2n/3 from the lexicographic names
+        // Initialize string s12 of size 2n/3 from the lexicographic names
         int s12[n12 + 3]; s12[n12] = s12[n12 + 1] = s12[n12 + 2] = 0;
         for (int i = 0; i < n12; ++i)
             s12[p12[i] / 3 + (p12[i] % 3 == 1 ? 0 : n1)] = names[i];
         // Call the function recursively
         karkkainen_sanders_sa(s12, sa12, n12, name_count);
-        // TODO: here we have to reassign the order of p12 based in sa12
+        for (int i = 0; i < n12; ++i)
+            p12[i] = (sa12[i] < n1 ? 1 + 3 * sa12[i] : 2 + 3 * (sa12[i] - n1));
     }
     // If names are all distinct, assign as12 from the sorted suffixes
     else
         for (int i = 0; i < n12; ++i)
             sa12[fix12(p12[i])] = i;
 
-    // Next step is finding the relative order of suffixes in group 0
+    // Next step is sorting the suffixes in group 0
     int p0[n0];
 
     // Order in S(i+1) is implicit from sa12
@@ -106,25 +107,10 @@ void karkkainen_sanders_sa(int *s, int *sa, int n, int sigma) {
     // Sort suffixes in group 0
     sort_group0(s, p0, n0, sigma);
 
-
-    // Find the relative order of suffixes in group 0 from the sorted suffixes
-    // TODO: this might be unnecessary, check later.
-    int sa0[n0];
-    for (int i = 0; i < n0; ++i)
-        sa0[fix0(p0[i])] = i;
-
-    cout<<"i  : ";for (int i =0 ;i < n; ++i)
-        cout << i<<" ";cout <<endl;
-    cout<<"s  : ";for (int i =0 ;i < n; ++i)
-        cout << s[i]<<" ";cout <<endl;
-    cout<<"p0 : ";for (int i =0 ;i < n0; ++i)
-        cout << p0[i]<<" ";cout <<endl;
-    cout<<"p12: ";for (int i =(n%3==1?1:0) ;i < n12; ++i)
-        cout << p12[i]<<" ";cout<<endl;
-
     // We now proceed for the merge step
     int i = 0, i0 = 0, i12 = (n % 3 == 1 ? 1 : 0);
     int a1, a2, a3, b1, b2, b3;
+    // Compare suffixes in group 0 against groups 1 and 2
     while (i0 < n0 && i12 < n12) {
         // Comparison to suffix in group 1
         if (p12[i12] % 3 == 1) {
@@ -137,12 +123,9 @@ void karkkainen_sanders_sa(int *s, int *sa, int n, int sigma) {
             b1 = s[p12[i12]], b2 = s[p12[i12] + 1], b3 = sa12[fix12(p12[i12] + 2)];
         }
 
-        int win = lt(a1, b1, a2, b2, a3, b3) ? p0[i0] : p12[i12];
-        cout << "comp " << p0[i0] << " | " << p12[i12] << " : " << win;
-        cout<<"  .  "<<i0<<" | "<<i12<<endl;
-
         sa[i++] = lt(a1, b1, a2, b2, a3, b3) ? p0[i0++] : p12[i12++];
     }
+    // Copy the remaining suffixes
     for (;  i0 <  n0;  ++i0) sa[i++] =  p0[ i0];
     for (; i12 < n12; ++i12) sa[i++] = p12[i12];
 }

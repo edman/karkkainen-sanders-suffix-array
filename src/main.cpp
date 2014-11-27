@@ -14,6 +14,6 @@ int main() {
     int sa[n];
     karkkainen_sanders_sa(s, sa, n, k);
     for (int i = 0; i < n; ++i)
-        cout << sa[i] << " "; cout<<endl;
+        cout << sa[i] << ","; cout<<endl;
 }
 
