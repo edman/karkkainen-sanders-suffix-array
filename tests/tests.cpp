@@ -33,17 +33,12 @@ class KarkkainenSandersTest : public testing::Test {
             S = new int[n + 3];
             memcpy(S, s, sizeof(int) * (n + 3));
 
-            int names[] = {3, 3, 2, 1, 5, 5, 4};
-            expected_names = new int[n12];
-            memcpy(expected_names, names, sizeof(int) * n12);
-
             p12 = new int [n12];
             for (int i = 1, j = 0; j < n12; i += i % 3, j++)
                 p12[j] = i;
         }
         int *S;
         int *p12;
-        int *expected_names;
         int n, n1, n2, n0, n12;
         int sigma;
 };
@@ -54,6 +49,7 @@ TEST_F(KarkkainenSandersTest, TripleSorting) {
 }
 
 TEST_F(KarkkainenSandersTest, AssignNames) {
+    int expected_names[] = {3, 3, 2, 1, 5, 5, 4};
     int names[n12];
     sort_triples(S, p12, n12, sigma);
     assign_names(S, names, p12, n12);
@@ -63,6 +59,13 @@ TEST_F(KarkkainenSandersTest, AssignNames) {
         else EXPECT_EQ(expected_names[p12[i] / 3 + n1], names[i]);
 }
 
+TEST_F(KarkkainenSandersTest, SuffixArray) {
+    int expected_sa[] = {10,7,4,1,0,9,8,6,3,5,2};
+    int sa[n];
+    karkkainen_sanders_sa(S, sa, n, sigma);
+    for (int i = 0; i < n; ++i)
+        EXPECT_EQ(expected_sa[i], sa[i]);
+}
 
 class KarkkainenSandersTest2 : public testing::Test {
     protected:
@@ -77,17 +80,12 @@ class KarkkainenSandersTest2 : public testing::Test {
             S = new int[n + 3];
             memcpy(S, s, sizeof(int) * (n + 3));
 
-            int names[] = {3,5,1,2,4};
-            expected_names = new int[n12];
-            memcpy(expected_names, names, sizeof(int) * n12);
-
             p12 = new int [n12];
             for (int i = 1, j = 0; j < n12; i += i % 3, j++)
                 p12[j] = i;
         }
         int *S;
         int *p12;
-        int *expected_names;
         int n, n1, n2, n0, n12;
         int sigma;
 };
@@ -99,6 +97,7 @@ TEST_F(KarkkainenSandersTest2, TripleSorting) {
 
 
 TEST_F(KarkkainenSandersTest2, AssignNames) {
+    int expected_names[] = {3,5,1,2,4};
     int names[n12];
     sort_triples(S, p12, n12, sigma);
     assign_names(S, names, p12, n12);
@@ -109,6 +108,14 @@ TEST_F(KarkkainenSandersTest2, AssignNames) {
             EXPECT_EQ(expected_names[p12[i] / 3 + n1], names[i]);
 }
 
+
+TEST_F(KarkkainenSandersTest2, SuffixArray) {
+    int expected_sa[] = {3,2,1,0,6,5,4};
+    int sa[n];
+    karkkainen_sanders_sa(S, sa, n, sigma);
+    for (int i = 0; i < n; ++i)
+        EXPECT_EQ(expected_sa[i], sa[i]);
+}
 
 
 

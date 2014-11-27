@@ -1,7 +1,7 @@
 
 # All tests produced by this Makefile.  Remember to add new tests you created
 # to the list.
-TESTS = tests
+TESTS = exec
 
 # House-keeping build targets.
 
