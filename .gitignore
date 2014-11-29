@@ -1,4 +1,6 @@
 .DS_Store
+.ropeproject
 *.o
 exec
+tin
 
