@@ -120,31 +120,3 @@ void karkkainen_sanders_sa(int *s, int *sa, int n, int sigma) {
     for (; i12 < n12; ++i12) sa[i++] = p12[i12];
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
